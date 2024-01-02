@@ -47,7 +47,7 @@ export const NavLayout = (props: NavLayoutProps) => {
           <a href={`/${locale}/`}>
             <StarknetLogo />
           </a>
-          <Box display={{ base: "none", lg: "block" }}>
+          <Box display={{ base: "none", xl: "block" }}>
               <ButtonGroup variant="link" spacing="18px" sx={{ pl: "34px" }}>
                 {props.items}
               </ButtonGroup>
@@ -55,7 +55,7 @@ export const NavLayout = (props: NavLayoutProps) => {
         </HStack>
         <HStack spacing={6}>
           {props.searchArea}
-          <Box display={{ base: "none", lg: "block" }} sx={{marginInlineStart: "12px !important"}}>
+          <Box display={{ base: "none", xl: "block" }} sx={{marginInlineStart: "12px !important"}}>
               <IconButton
                 icon={
                   colorMode === "light" ? (
@@ -78,15 +78,15 @@ export const NavLayout = (props: NavLayoutProps) => {
                   h="30px"
                   position="relative"
                   marginInlineStart="12px !important"
-                  display={{ base: "none", lg: "block" }}
+                  display={{ base: "none", xl: "block" }}
                 />
-                <Box display={{ base: "none", lg: "block" }} marginInlineStart="0 !important">
+                <Box display={{ base: "none", xl: "block" }} marginInlineStart="0 !important">
                   {props.languageSwitcher}
                 </Box>
               </>
             )}
 
-            <Box display={{ base: "block", lg: "none" }}><IconButton
+            <Box display={{ base: "block", xl: "none" }}><IconButton
               ref={menuButtonRef}
               icon={<Icon as={MenuIcon} fontSize="2xl" />}
               aria-label="Open Menu"
