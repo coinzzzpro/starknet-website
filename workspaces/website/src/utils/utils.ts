@@ -1,51 +1,44 @@
 import { LinkData } from "@starknet-io/cms-data/src/settings/main-menu";
 
-export const titleCase = (s: string = "") => {
+export const titleCase = (s = "") => {
   return s
-    .replace(/^[-_]*(.)/, (_, c) => c.toUpperCase())
-    .replace(/[-_]+(.)/g, (_, c) => ` ${c.toUpperCase()}`);
+    .split(/[-_]+/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 export function getComputedLinkData(
   locale: string,
   link?: LinkData
 ): { href?: string; label?: string } {
-  if(!link){
-    return {href: '', label: ''}
-  }
-  let href;
-
-  const label =
-    link.custom_title || link.page_data?.title || link.post_data?.title;
-
-  if (link.custom_external_link) {
-    href = link.custom_external_link;
-  } else if (link.custom_internal_link) {
-    href = `/${locale}/${link.custom_internal_link.replace(/(^\/|\/$)/g, "")}`;
-  } else if (link.page_data) {
-    href = link.page_data.link;
-  } else if (link.post_data) {
-    href = `/${locale}/posts/${link.post_data.category}/${link.post_data.slug}`;
+  if (!link) {
+    return { href: '', label: '' };
   }
 
-  if(!href){
-    href = '#'
-  }
+  const label = link.custom_title || link.page_data?.title || link.post_data?.title;
+
+  let href = link.custom_external_link || 
+             `/${locale}/${link.custom_internal_link?.replace(/(^\/|\/$)/g, "")}` ||
+             link.page_data?.link ||
+             `/${locale}/posts/${link.post_data?.category}/${link.post_data?.slug}`;
+
+  href = href || '#';
 
   return { href, label };
 }
 
-export function loadScript(url: string) {
-  return new Promise<void>((resolve, reject) => {
+export function loadScript(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
     const head = document.getElementsByTagName("head")[0];
-    const script: HTMLScriptElement = document.createElement("script");
+    const script = document.createElement("script");
     script.src = url;
-    script.onload = () => {
-      resolve();
-    };
-    script.onerror = (error) => {
-      reject(error);
-    };
+
+    // Resolve the promise when the script is successfully loaded
+    script.onload = () => resolve();
+
+    // Reject the promise if there's an error loading the script
+    script.onerror = error => reject(error);
+
     head.appendChild(script);
   });
 }
